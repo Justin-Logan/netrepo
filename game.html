@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Justin's Game'">
+  <title>Game - Justin Logan</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" type="image/x-icon" href="/media/favicon.ico">
+</head>
+<body>
+  <header id="sidebar">
+      <h1>Home</h1>
+      <nav>
+          <ul>
+              <li><a href="/home">Home</a></li>
+              <li><a href="/photos">Photos</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/game">Game</a></li>
+          </ul>
+      </nav>
+  </header>
+  <main>
+
+    <textarea id="console" readonly></textarea>
+    <div id="inputContainer">
+      <input type="text" id="inputBox" placeholder="Input">
+      <button id="submitBtn">Submit</button>
+    </div>
+
+  </main>
+  <script>
+    function delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function dwait() {
+      await delay(3000);
+      console.log('Delay finished!');
+    }
+
+    const consoleElement = document.getElementById('console');
+    const inputBox = document.getElementById('inputBox');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function printMessage(message) {
+      consoleElement.value += message + '\n';
+      consoleElement.scrollTop = consoleElement.scrollHeight;
+    }
+
+    class Game {
+      constructor() {
+        this.player = new Player();
+        printMessage("Hello, what is your name?");
+        submitBtn.addEventListener('click', this.onNameSubmit.bind(this));
+      }
+
+      clearConsole() {
+        consoleElement.value = '';
+      }
+
+      printMessage(message) {
+        printMessage(message);
+      }
+
+      onNameSubmit() {
+        const input = inputBox.value;
+        if (!/^[a-zA-Z]+$/.test(input)) {
+          this.clearConsole();
+          printMessage("Alphabetical characters only!");
+        } else if (input.length <= 2) {
+          this.clearConsole();
+          printMessage("There is a minimum character limit of 3!");
+        } else {
+          this.player.setName(input);
+          this.clearConsole();
+          inputBox.value = '';
+          this.printMessage("Welcome " + this.player.getName() + "!");
+          const delayTime = 2000;
+          const delayPromise = delay(delayTime);
+          delayPromise.then(() => {
+            this.clearConsole();
+            this.setupGame();
+          });
+        }
+      }
+
+      setupGame() {
+        printMessage("The goal of the game is to guess the correct number.");
+        dwait();
+        setDifficultyAndTarget(this);
+        this.checkUserGuess();
+      }
+
+      checkUserGuess() {
+
+        const handleGuess = () => {
+          const input = parseInt(inputBox.value);
+          //inputBox.value = '';
+
+          if (input !== this.targetNumber) {
+            this.clearConsole();
+            const prevHeat = heat(input, this.targetNumber);
+            printMessage(diff);
+            printMessage("You're " + prevHeat);
+            printMessage("Enter a guess:");
+            
+          } else {
+            this.clearConsole();
+            gameOver(this, 0);
+          }
+        };
+
+        submitBtn.removeEventListener('click', this.onNameSubmit.bind(this));
+        submitBtn.addEventListener('click', handleGuess);
+      }
+
+    }
+
+    class Player {
+      constructor() {
+        this.name = '';
+      }
+
+      setName(name) {
+        this.name = name;
+      }
+
+      getName() {
+        return this.name;
+      }
+    }
+
+    const difficultyLevels = {
+      easy: {
+        label: "Easy (Number in the range of 1-5)",
+        range: { min: 1, max: 5 },
+      },
+      medium: {
+        label: "Medium (Number in the range of 1-10)",
+        range: { min: 1, max: 10 },
+      },
+      hard: {
+        label: "Hard (Number in the range of 1-15)",
+        range: { min: 1, max: 15 },
+      }
+    };
+
+    let selectedDifficulty;
+    let diff;
+
+    function heat(guess, target) {
+      if (Math.abs(guess - target) === 1) {
+        return "Burning Hot!";
+      } else if (Math.abs(guess - target) === 2 || Math.abs(guess - target) === 3) {
+        return "Warm...";
+      } else if (Math.abs(guess - target) === 4 || Math.abs(guess - target) === 5 || Math.abs(guess - target) === 6) {
+        return "Cold.";
+      }
+      return "Super Cold!";
+    }
+
+    function gameOver(game, x) {
+  if (x === 0) {
+    printMessage("Congrats, " + game.player.getName() + "! You've guessed the number (" + game.targetNumber + ") correctly on " + diff + "!");
+    setTimeout(function() {
+      location.reload();
+    }, 3000);
+  } else {
+    printMessage(diff);
+    printMessage("Better luck next time!");
+    setTimeout(function() {
+      location.reload();
+    }, 3000);
+  }
+}
+
+
+    function setDifficultyAndTarget(game) {
+      printMessage("What difficulty would you like to play on?");
+      let i = 1;
+      for (const [difficulty, level] of Object.entries(difficultyLevels)) {
+        printMessage(i + " - " + level.label);
+        i++;
+      }
+
+      const handleDifficulty = () => {
+        const input = parseInt(inputBox.value);
+
+        if (input >= 1 && input <= Object.keys(difficultyLevels).length) {
+          const selectedLevel = Object.values(difficultyLevels)[input - 1];
+          printMessage(selectedLevel.label);
+          game.difficulty = selectedLevel.range.max;
+          game.targetNumber = generateRandomNumber(selectedLevel.range.min, selectedLevel.range.max);
+          diff = selectedLevel.label;
+
+          submitBtn.removeEventListener('click', handleDifficulty);
+          submitBtn.addEventListener('click', game.checkUserGuess.bind(game));
+          inputBox.value = '';
+        }
+      };
+
+      submitBtn.removeEventListener('click', game.onNameSubmit.bind(game));
+      submitBtn.addEventListener('click', handleDifficulty);
+      inputBox.value = '';
+    }
+
+    function generateRandomNumber(minValue, maxValue) {
+      return Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
+    }
+
+    new Game();
+  </script>
+  <footer>
+    <p>&copy; Justin Logan 2023</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Justin's Photos">
+    <title>Photos - Justin Logan</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="/media/favicon.ico">
+    <script src="/javascript/openPreview.js"></script>
+</head>
+<body>
+    <header id="sidebar">
+        <h1>Photos</h1>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/photos">Photos</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/game">Game</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+
+        <div class="gallery">
+                <img 
+                srcset="/media/suzie1-171w.webp 257w, /media/suzie1-700w.webp 1050w, /media/suzie1-973w.webp 1460w, /media/suzie1-1187w.webp 1780w, /media/suzie1-1365w.webp 2048w"
+                sizes="(min-width: 2640px) calc(40vw - 151px), (min-width: 1120px) calc(38vw - 99px), (min-width: 340px) calc(40vw - 25px), calc(80vw - 30px)"
+                src="/media/suzie1-1365w.webp"
+                alt="First picture of our family pet, Suzie. She's very cute."
+                class="gallery-img"
+                onclick="openPreview(this); return false;">
+
+                <img 
+                srcset="/media/suzie2-384w.webp 256w, /media/suzie2-960w.webp 640w, /media/suzie2-1305w.webp 870w, /media/suzie2-1575.webp 1050w"
+                sizes="(min-width: 2640px) calc(40vw - 151px), (min-width: 1120px) calc(38vw - 99px), (min-width: 340px) calc(40vw - 25px), calc(80vw - 30px)"
+                src="/media/suzie2-1575w.webp"
+                alt="First picture of our family pet, Suzie. She's very cute."
+                class="gallery-img"
+                onclick="openPreview(this); return false;">
+
+                <img 
+                srcset="/media/suzie3-384w.webp 256w, /media/suzie3-1125w.webp 750w, /media/suzie3-1545w.webp 1030w"
+                sizes="(min-width: 2660px) calc(80vw - 282px), (min-width: 1120px) calc(75.99vw - 176px), calc(80vw - 30px)"
+                src="/media/suzie3-1545w.webp"
+                alt="First picture of our family pet, Suzie. She's very cute."
+                class="gallery-img"
+                onclick="openPreview(this); return false;">
+            <div id="preview-container">
+            </div>
+        </div>
+
+        
+    </main>
+    <footer>
+        <p>&copy; Justin Logan 2023</p>
+    </footer>
+</body>
+</html>
