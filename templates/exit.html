@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Guessing Game</title>
+</head>
+<body>
+    
+    <div class="console">
+        <h1>Number guess game</h1>
+        <pre>Sorry, {{ player_name }}!</pre>
+        <p>You've failed to guess the correct number.</p> 
+        <p>You made {{ attempts }} attempts on {{ difficulty }}!</p>
+
+        <form method="POST" action="/playge">
+            <input type="text" id="input" name="input" required value="player_name" hidden autocomplete="off">
+            <button type="submit">Play again?</button>
+        </form>
+    
+    </div>
+</body>
+</html>

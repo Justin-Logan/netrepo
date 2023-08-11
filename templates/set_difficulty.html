@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Set Difficulty</title>
+</head>
+<body>
+    <form method="POST" action="/set_difficulty">
+        <label for="difficulty">Select difficulty:</label>
+        <select id="difficulty" name="difficulty">
+            {% for key, value in difficulties.items() %}
+                <option value="{{ key }}">{{ value[0] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Start Game</button>
+    </form>
+</body>
+</html>
